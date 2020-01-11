@@ -31,11 +31,7 @@ module Sequenced
 
     def next_id
       next_id_in_sequence.tap do |id|
-        if steps?
-          id += steps until unique?(id)
-        else
-          id += 1 until unique?(id)
-        end
+        id += 11 until unique?(id)
       end
     end
 
