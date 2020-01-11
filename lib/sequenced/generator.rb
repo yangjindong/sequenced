@@ -26,7 +26,7 @@ module Sequenced
     end
 
     def steps?
-      steps && steps.call(record)
+      steps
     end
 
     def next_id
