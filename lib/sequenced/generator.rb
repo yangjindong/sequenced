@@ -25,20 +25,21 @@ module Sequenced
       skip && skip.call(record)
     end
 
-    def steps?
-      steps
-    end
-
     def next_id
       next_id_in_sequence.tap do |id|
-        id += 11 until unique?(id)
+        id += 1 until unique?(id)
       end
     end
 
     def next_id_in_sequence
       start_at = self.start_at.respond_to?(:call) ? self.start_at.call(record) : self.start_at
+      steps = self.steps.respond_to?(:call) ? self.steps.call(record) : self.steps
       return start_at unless last_record = find_last_record
-      max(last_record.send(column) + 1, start_at)
+      if steps
+        max(last_record.send(column) + steps, start_at)
+      else
+        max(last_record.send(column) + 1, start_at)
+      end
     end
 
     def unique?(id)
